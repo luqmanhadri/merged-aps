@@ -59,17 +59,17 @@ function NavbarC() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" bg="dark">
         <Nav className="mr-auto" bg="dark">
-          {/* <Nav.Link as={Link} to="/home">Home</Nav.Link> */}
+         
           <Nav.Link href="/home">Home</Nav.Link>
-          <Nav.Link as={Link} to="/inventory">Inventory</Nav.Link>
-          <Nav.Link as={Link} to="/team_sheet">Team Sheet</Nav.Link>
+          
+          <Nav.Link href="team_sheet">Inventory</Nav.Link>
           <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
           <Nav.Link as={Link} to="/search_profile">Search Profile</Nav.Link>
           <Nav.Link as={Link} to="/team_dashboard">Team</Nav.Link>
           <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
           <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link>
           <Nav.Link as={Link} to="/schedule">Schedule</Nav.Link>
-          {/* <Nav.Link as={Link} to="/spesific_profile">My Profile</Nav.Link> */}
+          
           <Nav.Link as={Link} to="/admin">Admin Dashboard</Nav.Link>
         </Nav>
         {datatoken ? (
@@ -85,6 +85,8 @@ function NavbarC() {
         )}
       </Navbar.Collapse>
     </Navbar>
+
+
 
 
   )

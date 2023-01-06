@@ -8,14 +8,21 @@ import './Spesific_Profile.css'
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Card from '../Videos/Card';
+import Add_Achievement from './Add_Achievement';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
+import { Modal, Button } from 'react-bootstrap';
 
 function Spesific_Profile() {
 
   const [profileDetails, setProfileDetails] = useState({});
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [achievements, setAchievements] = useState([]);
   const [videos, setVideos] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openAchievement, setOpenAchievement] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -46,16 +53,20 @@ function Spesific_Profile() {
         //   `/users/find/${videoRes.data.userId}`
         // );
         setProfileDetails(accountRes.data);
+        setAchievements(accountRes.data.achievement)
         setVideos(videoRes.data);
         // dispatch(loginSuccess(accountRes.data));
       } catch (err) { }
     };
     fetchData();
-  }, [path]);
+  }, []);
+
+
+  const deleteAchievement = async (achievementId) => {
+    await axios.delete(`http://localhost:3001/account/achievement/${path}/${achievementId}`)
+  }
 
   
-
-
   // }, []);
 
   // const addComment = () => {
@@ -143,7 +154,18 @@ function Spesific_Profile() {
                       <h5 className="mb-0"></h5>
                     </div>
                     <div className="col-sm-9 text-secondary">
-                      {/* <p>{currentUser.achievements[0]}</p> */}
+
+                      {achievements.map((achievement) => {
+                        return (
+                          <li key={achievement._id}>
+                            {achievement.year}: {achievement.achievement}
+                            
+                            <IconButton><EditIcon/></IconButton>
+                            <IconButton onClick={() => deleteAchievement(achievement._id)}><DeleteIcon/></IconButton>
+                          </li>
+
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -155,7 +177,7 @@ function Spesific_Profile() {
                   </div>
 
                   {datatoken._id === path ? (
-                    <button className='btn btn-primary update_button'> Add Achievements </button>
+                    <button className='btn btn-primary update_button' onClick={() => setOpenAchievement(true)}> Add Achievements </button>
                   ) : (
                     <div></div>
                   )}
@@ -234,6 +256,7 @@ function Spesific_Profile() {
 
 
       {open && <Upload setOpen={setOpen} />}
+      {openAchievement && <Add_Achievement setOpenAchievement={setOpenAchievement} />}
 
       {/* <div className='Container'>
       {videos.map((video) => (

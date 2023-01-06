@@ -5,28 +5,21 @@ import { Link,useLocation } from "react-router-dom";
 import { format } from "timeago.js";
 import './Card.css'
 
+
+
 function Card({video}) {
 
   const path = useLocation().pathname.split("/")[2];
   const [videos, setVideos] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchVideos = async () => {
-  //     const res = await axios.get(`http://localhost:3001/videos/${path}`);
-  //     setVideos(res.data);
-  //   };
-  //   fetchVideos();
-  // }, []);
+
 
   return (
     <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <div className='videoCard_Container' 
       // type={type}
       >
-        {/* <img className='videoCard_Image'
-          // type={type}
-          src={video.imgUrl}
-        /> */}
+        
         <video className='videoCard_Image'
           // type={type}
           src={video.videoUrl}
@@ -43,6 +36,7 @@ function Card({video}) {
             {/* <h2 className="videoCard_ChannelName">{channel.name}</h2> */}
             <div className="videoCard_Info" >{video.views} views • {format(video.createdAt)}</div>
           </div>
+          
         </div>
       </div>
     </Link>

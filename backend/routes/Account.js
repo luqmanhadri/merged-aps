@@ -47,7 +47,7 @@ router.post("/login", signin)
 router.post("/achievement/:id", createAchievement)
 
 //post achievement
-router.delete("/achievement/:id", deleteAchievement)
+router.delete("/achievement/:id/:achievementid", deleteAchievement)
 
 //search account
 router.get("/search", searchAccount);
@@ -65,10 +65,10 @@ router.get("/storekeeper", getAccountStorekeepers);
 router.get("/sport/:sport", getAccountBySport);
 
 //post comment
-router.put("/comment/:id", createComment)
+router.post("/comment/:id", createComment)
 
 //delete comment
-router.delete("/comment/delete/:id", deleteComment)
+router.delete("/comment/:id/:commentid", deleteComment)
 
 //logout
 
