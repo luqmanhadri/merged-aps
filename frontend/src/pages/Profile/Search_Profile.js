@@ -47,6 +47,7 @@ function Search_Profile() {
           <Grid item xs={12} sm={4} key={key}>
           <div className='profile_card_container'>
           <div className='profile' key={key} onClick={() => navigate(`/profile/${value._id}`)}>
+            <img className='video_image' src={value.imgUrl}/>
             <div className='name'> {value.name} </div>
             <div className='age'> {value.age} </div>
             <div className='sport'> {value.sport} </div>

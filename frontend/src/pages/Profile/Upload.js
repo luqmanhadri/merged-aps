@@ -11,6 +11,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './Upload.css'
 import { useDispatch, useSelector } from 'react-redux'
+import { Snackbar } from "@mui/material";
 
 
 const Upload = ({ setOpen }) => {
@@ -22,31 +23,12 @@ const Upload = ({ setOpen }) => {
   const [desc, setDesc] = useState([]);
   const [imgUrl1, setImgUrl] = useState("");
   const [videoUrl1, setVideoUrl] = useState("");
+  const [openMB, setOpenMB] = useState(false);
 
-  // const [inputs, setInputs] = useState({});
-  // const [tags, setTags] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
   const id = currentUser._id
 
   const navigate = useNavigate()
-
-  // const handleChange = (e) => {
-  //   setInputs((prev) => {
-  //     return { ...prev, [e.target.name]: e.target.value };
-  //   });
-  // };
-
-
-  // const handleTitle = (e) => {
-  //   setTitle(e.target.value);
-  // };
-
-
-  // const handleDesc = (e) => {
-  //   setDesc(e.target.value);
-  // };
-
-
 
   const uploadFile = (file, urlType) => {
     const storage = getStorage(app);
@@ -96,7 +78,7 @@ const Upload = ({ setOpen }) => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    // const res = 
+    const res = 
     await axios.post("http://localhost:3001/videos",
       {
         userId: id,
@@ -107,6 +89,7 @@ const Upload = ({ setOpen }) => {
       })
 
     setOpen(false)
+    navigate(`/video/${res.data._id}`)
     // res.status===200 && navigate(`/videos/${res.data._id}`)
   }
 

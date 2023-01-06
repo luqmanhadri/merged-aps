@@ -36,15 +36,38 @@ function Home() {
     console.log("Failed")
   }
 
+  const datatoken = JSON.parse(token)
+  // useEffect(() => {
+  //   const accountRes = axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
+  //   // axios.get(`http://localhost:3001/account/${id}`).then((response) => {
+  //   //       setProfileDetails(response.data);
+  //   //     });
+  //   setProfileDetails(accountRes.data);
+
+  //   // axios.post("http://localhost:3001/announcement").then((response) => {
+  //   //   setAnnouncementDetails(response.data);
+  //   // });
+
+  // }, []);
+
   useEffect(() => {
-    // axios.get(`http://localhost:3001/account/${id}`).then((response) => {
-    //       setProfileDetails(response.data);
-    //     });
+    const fetchData = async () => {
+      try {
+        const accountRes = await axios.get(`http://localhost:3001/account/find/${datatoken._id}`);
+        // const profileRes = await axios.get(`/profile/${accountRes.data._id}`);
+        // const videoRes = await axios.get(`http://localhost:3001/videos/${path}`);
 
-    axios.post("http://localhost:3001/announcement").then((response) => {
-      setAnnouncementDetails(response.data);
-    });
-
+        // const channelRes = await axios.get(
+        //   `/users/find/${videoRes.data.userId}`
+        // );
+        setProfileDetails(accountRes.data);
+        console.log("Success")
+        // setAchievements(accountRes.data.achievement)
+        // setVideos(videoRes.data);
+        // dispatch(loginSuccess(accountRes.data));
+      } catch (err) { }
+    };
+    fetchData();
   }, []);
 
   // if(token) {
@@ -85,10 +108,10 @@ function Home() {
         <Grid item xs={12} xl={6} sm={6} >
           <div className="card">
             <div className="card-header">
-              <img src={currentUser.imgUrl} alt="Profile Image" className="profile-img" />
+              <img src={profileDetails.imgUrl} alt="Profile Image" className="profile-img" />
             </div>
             <div className="card-body">
-              <p className="name" onClick={() => navigate(`/profile/${currentUser._id}`)}>{currentUser.username}</p>
+              <p className="name" onClick={() => navigate(`/profile/${datatoken._id}`)}>{datatoken.username}</p>
 
               <p className="job">{currentUser.name}</p>
               <p className="job">{currentUser.sport}</p>

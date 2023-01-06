@@ -63,15 +63,33 @@ const AccountSchema = new mongoose.Schema({
         
     },
 
-    achievements : {
-        type: [mongoose.Schema.Types.Mixed],
+    achievement: {
+        type: [{
+            year: {
+                type: Number,
+                required: true
+              },
+              achievement: {
+                type: String,
+              },
+          }],
         default: [],
     },
     
 
     comment: {
-        type: Object,
-        default: '',
+        type: [{
+              comment: {
+                type: String,
+              },
+              userId: {
+                type: String,
+              },
+              role: {
+                type: String,
+              }
+          }],
+        default: [],
     },
 
     approved : {

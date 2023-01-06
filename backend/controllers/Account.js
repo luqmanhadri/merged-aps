@@ -158,7 +158,7 @@ const createAchievement = async (req, res, next) => {
   //   const savedAchievement = await newAchievement.save();
     try {
       await Account.findByIdAndUpdate(userId, {
-        $push: { achievements:
+        $push: { achievement:
           //  { $each :
           // savedAchievement._id 
           achievement
@@ -176,20 +176,18 @@ const createAchievement = async (req, res, next) => {
 
 const deleteAchievement = async (req, res, next) => {
   const userId = req.params.id;
+  const achievementid = req.params.achievementid;
   
-    try {
-      await Account.findByIdAndUpdate(userId, {
-        $unset: { achievements:
-          //  { $each :
-          // savedAchievement._id 
-          req.body
-          //  }
-        },
-      });
-    } catch (err) {
-      next(err);
-    }
-    res.json(req.body);
+  try {
+    // Find the user by their _id and update the comment field to remove the comment with the specified commentId
+    // await Account.findByIdAndUpdate(userId, { $pull: { comment: { $each: ["try string2"], $position: 0 } } });
+    await Account.findByIdAndUpdate(userId, { $pull: { achievement: {_id: achievementid} } });
+
+    // await Account.findByIdAndUpdate(userId, { $pull: { comment: { $each: [{ $slice: [position, 1] }] } } });
+    return res.json("Achievement deleted");
+  } catch (err) {
+    return res.json("Achievement can't be deleted")
+  }
 };
 
 const createComment = async (req, res, next) => {
@@ -233,16 +231,17 @@ const createComment = async (req, res, next) => {
 
 const deleteComment = async (req, res, next) => {
   const userId = req.params.id;
-  // const position = req.params.position;
+  const commentid = req.params.commentid;
   
   try {
     // Find the user by their _id and update the comment field to remove the comment with the specified commentId
-    await Account.findByIdAndUpdate(userId, { $pull: { comment: { $each: ["try string2"], $position: 0 } } });
+    // await Account.findByIdAndUpdate(userId, { $pull: { comment: { $each: ["try string2"], $position: 0 } } });
+    await Account.findByIdAndUpdate(userId, { $pull: { comment: {_id: commentid} } });
 
     // await Account.findByIdAndUpdate(userId, { $pull: { comment: { $each: [{ $slice: [position, 1] }] } } });
-    return { success: true };
+    return res.json("Comment deleted");
   } catch (err) {
-    return { success: false, error: err };
+    return res.json("Comment can't be deleted")
   }
 };
 

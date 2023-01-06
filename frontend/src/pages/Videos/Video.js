@@ -10,6 +10,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import './Video.css'
 import Cookies from 'js-cookie';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function Video() {
@@ -41,7 +42,13 @@ function Video() {
       } catch (err) {}
     };
     fetchData();
-  }, [token]); // Note the empty array here
+  }, [path]); // Note the empty array here
+
+  const handleDelete = async () => {
+    await axios.delete(`http://localhost:3001/videos/${path}`
+      
+    )
+  }
 
   // const handleLike = async () => {
   //   await axios.put(`/account/like/${currentVideo._id}`);
@@ -57,9 +64,12 @@ function Video() {
         <div className='video_container'>
         <div className='video_content'>
         <div className='video_wrapper'>
-        <video src={video.videoUrl} controls/>
+        <video className="video_videoFrame" src={video.videoUrl} controls/>
           </div>
+         
           <h1 className='video_title'>{video.title}</h1>
+          <button className="video_buttons" onClick={handleDelete}><DeleteIcon/></button>
+          
           <div className='video_details'>
             <span className='video_info'>
               {video.views} views • {format(video.createdAt)}
@@ -87,7 +97,7 @@ function Video() {
           <hr className='hr' />
           <div className='video_channel'>
           <div className='video_channelInfo' >
-            <img src={user.img} />
+            <img className="video_image" src={user.imgUrl} />
             <div className='video_channelDetail' >
               <span className='video_channelName' >{user.name}</span>
               <p className='video_description'>{video.desc}</p>
