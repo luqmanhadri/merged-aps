@@ -1,20 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const { Profile } = require("../models");
-const {} = require("../controllers/Account")
-const {createAthleteProfile, updateAthleteProfile, randomAthleteProfile, getPro} = require("../controllers/Profile")
-const { verifyToken } = require("../middlewares/verifyToken");
 
-//create profile
-router.post("/", verifyToken, createAthleteProfile)
+router.get("/", async (req, res) =>{
+    const listofProfiles = await Profile.findAll();
+    res.json(listofProfiles);
+});
 
-//update profile
-router.put("/:id", verifyToken, updateAthleteProfile)
+router.get("/byId/:id", async (req,res) =>{
+    const id = req.params.id;
+    const spesific_profile = await Profile.findByPk(id);
+    res.json(spesific_profile);
+})
 
-//get random profile
-router.get("/random", randomAthleteProfile)
-
-// router.get("/random", randomAthleteProfile)
-router.get("/:id", getPro)
+router.post("/", async (req, res) => {
+    const post = req.body
+    await Profile.create(post);
+    res.json(post);
+});
 
 module.exports = router;

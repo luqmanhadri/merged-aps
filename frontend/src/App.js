@@ -1,10 +1,11 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Inventory from './pages/Inventory/Inventory';
-import Search_Profile from './pages/Profile/Search_Profile';
-import Spesific_Profile from './pages/Profile/Spesific_Profile';
-import Team_Sheet from './pages/Team Management/Team_Sheet';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Profilepage from './pages/Profilepage';
+import Inventory from './pages/Inventory';
+// import Form from './components/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
+<<<<<<< HEAD
 import Booking from './pages/Booking/Booking';
 import Login from './pages/Authentication/Login';
 import Register from './pages/Authentication/Register';
@@ -82,7 +83,33 @@ function App() {
           </Route>
         </Routes>
     </Router>
+=======
+
+
+function App() {
+
+  return (
+    <div className="App">
+     <Router>
+      <div className='navbar'>
+      <Link to = "inventory"> Inventory Manager </Link>
+      <Link to = "myprofile"> My Profile </Link>
+      {/* <Link to = "Wellness Record"> Wellness Record </Link> */}
+      </div>
+>>>>>>> 7aabed20ef40086954cfaddb68f8baa85268a5bd
       
+      <Routes>
+      <Route path="/">
+        <Route index element = {<Home/>}/>
+        <Route path="profile/:id" element={<Profilepage />} />
+        <Route path="inventory" element={<Inventory />} />
+        {/* <Route path="about" element={<About />} /> */}
+        
+        
+      </Route>
+      </Routes>
+     </Router>
+    </div>
   );
 }
 
