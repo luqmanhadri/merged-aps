@@ -17,7 +17,7 @@ const createAccount = async(req,res,next) => {
         const newUser = new Account({ ...req.body, password: hash });
     
         await newUser.save();
-        res.json("User has been created!");
+        res.json(newUser);
       } catch (err) {
         next(err);
       }
@@ -45,22 +45,51 @@ const updateAccount = async (req,res,next) =>{
     
 }
 
-const deleteAccount = async (req, res, next) => {
-  if (req.params.id === req.user.id) {
-    try {
-      await Account.findByIdAndDelete(req.params.id);
-      res.json("User has been deleted.");
-    } catch (err) {
-      next(err);
+const approveUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    // Find the booking
+    const User = await Account.findById(userId);
+    if (!User) {
+      throw new Error('User not found');
     }
-  } else {
-    return next(res.json("You can delete only your account!"));
+    // Check if the booking is already approved
+    if (User.approved) {
+      throw new Error('User is already approved');
+    }
+    // Update the booking
+    User.approved = true;
+    await User.save();
+    res.json("User is approved")
+   
+  } catch (error) {
+    next(error);
   }
 };
 
-const getAccount = async (req, res, next) => {
+const deleteAccount = async (req, res, next) => {
   try {
-    const user = await Account.findById(req.params.id);
+    const deletedUser = await Account.findByIdAndDelete(req.params.id);
+    res.json("User deleted");
+  } catch (err) {
+    next(err);
+  }
+  
+};
+
+const getAccount = async (req, res, next) => {
+  const userId = req.params.id
+  try {
+    const user = await Account.findById(userId);
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getAccountUnapproved = async (req, res, next) => {
+  try {
+    const user = await Account.find({ approved: false});
     res.json(user);
   } catch (err) {
     next(err);
@@ -120,6 +149,17 @@ const randomAccount = async (req, res, next) => {
   }
 };
 
+const randomAccountHome = async (req, res, next) => {
+  try {
+    const profile = await Account.aggregate([
+      { $match: { role: 'Athlete' } },
+      { $sample: { size: 4 } }]);
+    res.json(profile);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 const searchAccount = async (req, res, next) => {
   const query = req.query.q;
@@ -139,7 +179,7 @@ const searchAccount = async (req, res, next) => {
 
 const getAccountBySport = async (req, res, next) => {
   try {
-    const sport = req.params.sport; // get the sport from the request params
+    const sport = req.params.id // get the sport from the request params
     const users = await Account.find({ sport: sport }); // get the users with the given sport
     return res.json(users); // return the users in the response
   } catch (error) {
@@ -152,15 +192,11 @@ const getAccountBySport = async (req, res, next) => {
 const createAchievement = async (req, res, next) => {
   const userId = req.params.id;
   const achievement = req.body
-  // const newAchievement = new Account(req.body);
-
-  // try {
-  //   const savedAchievement = await newAchievement.save();
+  
     try {
       await Account.findByIdAndUpdate(userId, {
         $push: { achievement:
-          //  { $each :
-          // savedAchievement._id 
+         
           achievement
           //  }
         },
@@ -169,9 +205,7 @@ const createAchievement = async (req, res, next) => {
       next(err);
     }
     res.json(req.body);
-  // } catch (err) {
-  //   next(err);
-  // }
+ 
 };
 
 const deleteAchievement = async (req, res, next) => {
@@ -277,5 +311,6 @@ const signin = async (req, res, next) => {
 
 module.exports = {createAccount, updateAccount, deleteAccount, getAccount, randomAccount, signin, 
 createAchievement, deleteAchievement,  searchAccount, getAccountCoaches,
-getAccountManagers, getAccountStorekeepers, createComment, deleteComment, getAccountBySport}
+getAccountManagers, getAccountStorekeepers, createComment, deleteComment, getAccountBySport, 
+approveUser, randomAccountHome, getAccountUnapproved}
 

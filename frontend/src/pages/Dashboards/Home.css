@@ -1,20 +1,7 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    transition: 0.3s;
-    font-family: 'San Francisco', sans-serif;
-    
-}
 
-
-.card {
-    /* max-width: 250px; */
+.home-card {
     margin: 2%;
-    /*margin-right: 5%; */
-    /* margin-top: 5%; */
-    background-color: white;
+    background-color: #28223F;
     box-shadow: 0 10px 90px #00000024;
     text-align: center;
     font-size: 20px;
@@ -22,143 +9,76 @@
     justify-content: center;
 }
 
-.card .card-header {
-    margin-top: 5%;
+.home-card .home-card-header {
+    margin-top: 2%;
+    margin-bottom: 20px;
     position: relative;
-    height: 10%;
+    height: 50px;
+    background-color: #28223F;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border: none;
 }
 
-
-.card .card-header .profile-img {
+.home-card .home-card-header h1{
+    margin-bottom: 0;
+    align-items: center;
     
-    width: 130px;
-    height: 130px;
+}
+
+.home-card .home-card-header .profile-img {
+    
+    width: 140px;
+    height: 140px;
     border-radius: 1000px;
     position: absolute;
     margin-top: 15px;
-    /* left: 50%; */
     transform: translate(-50%, -50%);
-    border: 8px solid blueviolet;
+    border: 8px solid rgb(150, 39, 253) ;
     box-shadow: 0 0 20px #00000033;
+    background-color: white;
+
 }
 
-.card .card-header .profile-img:hover {
+.home-card .home-card-header .profile-img:hover {
     
     width: 160px;
     height: 160px;
     
-    border: 8px solid palevioletred;
+    border: 8px solid #0ecbfa;
 }
 
 
-.card .card-body {
+.home-card .home-card-body {
     padding: 10px 40px;
+    background-color: white;
 }
 
-.card .card-body .name {
-    margin-top: 10%;
+.home-card .home-card-body .name {
+    margin-top: 3%;
     font-size: 22px;
     font-weight: bold;
     color: blueviolet;
 }
 
-.card .card-body .name:hover {
-    margin-top: 10%;
+.home-card .home-card-body .name:hover {
+    margin-top: 3%;
     font-size: 24px;
-    color: palevioletred;
+    color: #36adf1;
     cursor: pointer;
-}
-
-.card .card-body .mail {
-    font-size: 14px;
-    color: #c2bdbd;
-}
-
-.card .card-body .mail:hover {
-    font-size: 16px;
-    color: #ffffff;
-}
-
-.card .card-body .job {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-/* .card-wellness {
-    
-    margin: 2%;
-   
-    margin-top: 15%;
-    background-color: white;
-    box-shadow: 0 10px 90px #00000024;
-    text-align: center;
-    font-size: 20px;
-    border-radius: 15px;
-    justify-content: center;
-}
-
-.card-wellness .card-wellness-header {
-    margin-top: 5%;
-    position: relative;
-    height: 10%;
-}
-
-.card-wellness .card-wellness-body {
-    padding: 10px 40px;
-} */
-
-/* .card .social-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-}
-
-.card .social-links .social-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 40px;
-    background-color: #c74385;
-    color: #ffffff;
-    font-size: 20px;
-    border-radius: 100%;
-    text-decoration: none;
-    margin: 0 13px 30px 0;
-}
-
-.card .social-links .social-icon:last-child {
-    margin-right: 0;
-}
-
-.card .social-links .social-icon:hover {
-    background-color: #d885af;
-    height: 50px;
-    width: 50px;
-    text-decoration: none;
-} */
-
-
-.card .card-footer {
-    background-color: blueviolet;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    padding: 20px 0 20px 0;
-}
-
-.card .card-footer .count {
-    font-size: 14px;
-    color: white;
 }
 
 
 @media screen and (max-width: 575px) {
-    .card {
+    .home-card {
         width: 96%;
     }
 
-    .card .card-body {
+    .home-card .home-card-body {
         padding: 10px 20px;
     }
 }
+
+
+

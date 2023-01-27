@@ -3,6 +3,7 @@ import './Search_Profile.css'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Grid } from '@mui/material';
 
 function Search_Result() {
 
@@ -22,15 +23,31 @@ function Search_Result() {
         <div>
             {profiles.map((value, key) => {
                 return (
-                    <div className='profile_card_container'>
-                        <div className='profile' key={key} onClick={() => navigate(`/profile/${value._id}`)}>
-                            <div className='profile_name'> {value.name} </div>
-                            <div className='age'> {value.age} </div>
-                            <div className='profile_sport'> {value.sport} </div>
-
-
+                    <Grid item xs={12} lg={3} key={key}>
+                    <div className="profile-card-container" key={key}>
+                      <div className="card">
+                        <div className="imgBx">
+                          <img src={value.imgUrl ? value.imgUrl : 'https://flaticons.net/icon.php?slug_category=application&slug_icon=user-profile'} alt="" />
                         </div>
+                        <div className="contentBx">
+                          <h2>@{value.username ? value.username : "Unknown"}</h2>
+                          <h3>{value.sport} Player</h3>
+                          <div className="size">
+                            <h3>Age : {value.age} </h3>
+      
+                          </div>
+                          <div className="color">
+                            <h3>Position :</h3>
+      
+                          </div>
+      
+                          <button onClick={() => navigate(`/profile/${value._id}`)}>View Profile</button>
+                        </div>
+                      </div>
                     </div>
+      
+      
+                  </Grid>
 
                 )
 

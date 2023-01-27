@@ -3,73 +3,128 @@ import "./Team_Sheet.css"
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import { Grid } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Team_Navbar from './Team_Navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Player_Selection from './Player_Selection';
+import { MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
 function Team_Sheet() {
 
-  const [listofProfiles, setListofProfiles] = useState([]);
+  // const [listofProfiles, setListofProfiles] = useState([]);
+  const path = useLocation().pathname.split("/")[2];
+  const [players, setPlayers] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProfiles, setSelectedProfiles] = useState([]);
+  const [openSelection, setOpenSelection] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/account/random").then((response) => {
-      setListofProfiles(response.data);
-    });
+    const fetchData = async () => {
+      try {
+        const players = await axios.get(`http://localhost:3001/account/sport/${path}`);
+        setPlayers(players.data);
+      } catch (err) { }
+    };
+    fetchData();
   }, []);
+
+//   const handleSubmit = async () => {
+//     const playerIds = selectedProfiles.map(profile => profile._id);
+//     try {
+//         const response = await axios.post(`http://localhost:3001/team/sheet/${path}`, { players: playerIds });
+//         console.log(response);
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
+const handleSubmit = async () => {
+  const playerIds = selectedProfiles.map(profile => ({userId: profile._id}));
+  try {
+      const response = await axios.patch(`http://localhost:3001/team/sheet/${path}`, { players: playerIds });
+      console.log(response);
+  } catch (error) {
+      console.error(error);
+  }
+}
+
 
   let navigate = useNavigate();
 
-    const token = Cookies.get('access_token');
-    const datatoken = JSON.parse(token)
-    return (
-        <div>
-            <Grid container justify="center">
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                    <header className="header">
-                        <Link to="/team_dashboard">
-                            <button className='header_button' ><span className="text">Dashboard</span></button>
-                        </Link>
-                        <Link to={`/player_database/${datatoken.sport}`}>
-                            <button className='header_button' ><span className="text">Player Database</span></button>
-                            </Link>
-                        <Link to="/team_sheet">
-                            <button className='header_button'><span className="text">Team Sheet</span></button>
-                        </Link>
-
-                    </header>
-                </Grid>
-            </Grid>
-
-      <div className='team-table'>
-        <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Name</th>
-              <th>Age</th>
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-
-        <button className='team_button'> Make new team sheet </button>
-      </div>
-      {listofProfiles.map((profile) => {
-        return (
-          <div className='profile'>
-            <div className='name'>{profile.name} </div>
-            <div className='age'>{profile.age} </div>
-
-          </div>
+  const token = Cookies.get('access_token');
+  const datatoken = JSON.parse(token)
 
 
-          // <tr>
-          //     <td> {profile.name} </td>
-          //     <td> {profile.age} </td>
-          // </tr>
-        )
-      })}
+  const toggleOpen = () => {
+    setIsOpen(true);
+  }
+
+
+  return (
+    <div>
+      <Team_Navbar />
+     
+      <MDBContainer>
+        <MDBRow>
+          
+          <MDBCol lg={6}>
+          <button className='btn btn-primary' onClick={toggleOpen}>Select players</button>
+      {isOpen && <Player_Selection players={players}
+        setSelectedProfiles={setSelectedProfiles}
+        setOpenSelection={setOpenSelection}
+        setPlayers={setPlayers}
+        selectedProfiles={selectedProfiles}
+        setIsOpen={setIsOpen}
+      />}
+     </MDBCol>
+
+
+      <MDBCol lg={6}>
+          <TableContainer component={Paper} sx={{ maxWidth: 650, minWidth: 400 }}>
+            <Table sx={{ maxWidth: 650, minWidth: 400 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell align="right">Position</TableCell>
+                  <TableCell align="right">Age</TableCell>
+                  <TableCell align="right">Username</TableCell>
+
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {/* {players.map((player) => ( */}
+                {selectedProfiles.map((profile) => (
+                  <TableRow
+                    key={profile.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {profile.name}
+                    </TableCell>
+                    <TableCell align="right">{profile.position}</TableCell>
+                    <TableCell align="right">{profile.age}</TableCell>
+                    <TableCell align="right">{profile.username}</TableCell>
+
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <button className='btn btn-success' onClick={handleSubmit}> Submit Sheet </button>
+          </MDBCol>
+
+        
+
+
+</MDBRow>
+</MDBContainer>
 
     </div>
   )

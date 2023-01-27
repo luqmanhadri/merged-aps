@@ -1,25 +1,3 @@
-// const images = [
-//     {
-//       image: "../../images/sport_science.png",
-//       title: "Brazil",
-//     },
-//     {
-//       image: "../../images/sukmum-baseball.jpg",
-//       title: "China",
-//     },
-//     {
-//       image: "../../images/um-tarik-tali.jpg",
-//       title: "France",
-//     },
-//     {
-//       image: "../../images/sukmum.jpg",
-//       title: "Japan",
-//     },
-    
-//   ];
-
-//   module.exports = {images}
-
 
 import img2 from '../../images/sukmum-baseball.jpg'
 import img3 from '../../images/sukmum.jpg'

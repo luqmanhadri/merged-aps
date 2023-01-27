@@ -3,16 +3,10 @@ import { useState } from 'react';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { format } from 'date-fns'
-import {
-  faBed,
-  faCalendarDays,
-  faCartShopping,
-  faLocation,
-  faPerson,
-  
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { format, parseISO } from 'date-fns'
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import axios from 'axios';
 import './Booking.css';
 import Item from './Item';
@@ -20,157 +14,176 @@ import useFetch from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { new_search } from '../../redux/bookingSlice';
-import { Grid } from '@mui/material';
+import { Row, Col } from 'react-bootstrap';
+import { Grid } from '@mui/material'
+import ItemCard from './ItemCard';
+import DateTimePicker from 'react-datetime';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import Cookies from 'js-cookie';
+
 
 function Booking() {
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
+
+  const token = Cookies.get('access_token');
+  if (token) {
+    const data = JSON.parse(token);
+    // console.log(data);
+  } else {
+    console.log("Failed")
+  }
+
+  let datatoken
+  
+  if (token && typeof token !== 'undefined') {
+    datatoken = JSON.parse(token);
+    // use datatoken here
+  }
+
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState();
 
-  const [openDate, setOpenDate] = useState(false)
-
-  const [dates, setDate] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [quantity, setQuantity] = useState(0);
   const [store, setStore] = useState("");
+  const [selectedStore, setSelectedStore] = useState('');
+  const [itemBook, setItemBook] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
-  const [item, setItemBook] = useState("");
-  // const [amount, setAmount] = useState(0);
-  // const [cost, setCost] = useState(0);
-
-  const handleQuantity = (operation) => {
-    setQuantity(() => {
-      return (
-        operation === "i" ? quantity + 1 : quantity - 1
-      );
-    });
-  };
-
-  
-
-  const handleSearch = () => {
-    // dispatch({ type: "new_search", payload: { items, dates, store, quantity } });
-    dispatch(new_search({ payload: { item,  store, quantity } }));
-    navigate("/list", { state: { item,  store, quantity } });
-  };
-
-  
+  const [storeDropdown, setStoreDropdown] = useState([])
 
   useEffect(() => {
 
     try {
-      setLoading(true)
+      
       axios.get("http://localhost:3001/inventory").then((response) => {
         setItems(response.data);
+        setStoreDropdown(Array.from(new Set(response.data.map(item => item.store))))
+        response.data.forEach(item => setQuantity({ ...quantity, [item._id]: 1 }));
+
       });
-      setLoading(false)
+     
     }
     catch (error) {
-      setError(true)
+      
       console.log(error)
-      setLoading(false)
+      
     }
   }, [])
+
+ 
+
+  const handleChange = (event) => {
+    setSelectedStore(event.target.value);
+  };
+
 
   return (
     <div className='Inventory'>
 
-      <div className='SearchItemBar'>
-        <div className="headerSearchItem">
-          <FontAwesomeIcon icon={faBed} className="headerIcon" />
-          <input
-            type="text"
-            placeholder="What are you searching?"
-            className="headerSearchInput"
-            onChange={(e) => setItemBook(e.target.value)}
-          />
-        </div>
+      <ShoppingCartIcon style={{ cursor: 'pointer' }} onClick={() => navigate("/cart")} />
+      <NotificationsActiveIcon style={{ cursor: 'pointer' }} onClick={() => navigate(`/bookingstatus/${datatoken._id}`)}/>
 
-        <div className='headerSearchItem'>
-          <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
-          <span onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(dates[0].startDate, "dd/MM/yyyy")} to ${format(dates[0].endDate, "dd/MM/yyyy")}`} </span>
-          {openDate && <DateRange
-            editableDateInputs={true}
-            onChange={item => setDate([item.selection])}
-            moveRangeOnFirstSelection={false}
-            ranges={dates}
-            className="date"
-          />}
-        </div>
+      <Grid container spacing={0}>
+        <Grid className="header-container">
+          <Row className="header-row">
+            <Col xs={12} sm={6} lg={6} xl={4}>
+              <p className='mb-0'>Item name:</p>
+              <input
+                type="text"
+                placeholder="Enter item name"
+                // className="search-input"
+                className="auth_input"
+                onChange={(e) => setItemBook(e.target.value)}
+              />
+            </Col>
+            <Col xs={12} sm={6} lg={6} xl={4}>
+            <p className='mb-0'>Start Date:</p>
+              <DatePicker
+                selected={startDate}
+                onChange={date => setStartDate(date)}
+                // className="check-in"
+                className="auth_input"
+                placeholderText='Start date'
+                dateFormat="dd/MM/yyyy"
+              />
+            </Col>
 
-        <div className="headerSearchItem">
-          <FontAwesomeIcon icon={faLocation} className="headerIcon" />
-          <input
-            type="text"
-            placeholder="Where are you booking?"
-            className="headerSearchInput"
-            onChange={(e) => setStore(e.target.value)}
-          />
-        </div>
+            <Col xs={12} sm={6} lg={6} xl={4}>
+            <p className='mb-0'>Start Time:</p>
+              <input
+                type="time"
+                placeholder="Enter time (HH:MM)"
+                // className="time-start"
+                className="auth_input"
+                pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+                onChange={(e) => setStartTime(e.target.value)}
+              />
+            </Col>
 
-        <button className='btn btn-primary' onClick={handleSearch}> Search </button>
+  
+            <Col xs={12} sm={6} lg={6} xl={4}>
+            <p className='mb-0'>End Date:</p>
+              <DatePicker selected={endDate}
+                onChange={date => setEndDate(date)}
+                // className="check-out"
+                className="auth_input"
+                placeholderText='End date'
+                dateFormat="dd/MM/yyyy" />
+            </Col>
 
-      </div>
-
-      {/* <FontAwesomeIcon icon={faCartShopping} onClick={} /> */}
-
-
-      <Grid container justify="center" alignItems="center" marginTop={5}>
-      <div className='row justify-content-center'>
-
-      
-        {loading ? (<h1>Loading...</h1>)
-          : error ? (<h1>Error</h1>)
-            : (items.map((item, key) => {
-              return <div className='col-md-7 mt-2' key={key} >
-                {/* <Item item={item} /> */}
-                <div className='row bs'  >
-                  <div className='col-md-8' >
-                    <h2>{item.item_name}</h2>
-                    <h5>Store : {item.store}</h5>
-                    <span>Quantity available : {item.item_amount}</span>
-
-                    <div className="optionCounter" >
-                      <button
-                        disabled={quantity <= 0}
-                        className="optionCounterButton btn btn-primary"
-                        onClick={() => handleQuantity("d")}
-                      >
-                        -
-                      </button>
-                      <span className="optionCounterNumber">
-                        {quantity}
-                      </span>
-                      <button
-                        className="optionCounterButton btn btn-primary"
-                        onClick={() => handleQuantity("i")}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <div style={{ float: 'right' }}>
-                      <button className='btn btn-primary'>Add to booking list</button>
-                    </div>
-
-                  </div>
-                </div>
+            <Col xs={12} sm={6} lg={6} xl={4}>
+            <p className='mb-0'>End Time:</p>
+              <input
+                type="time"
+                placeholder="Enter time (HH:MM)"
+                // className="time-end"
+                className="auth_input"
                 
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            </Col>
 
-              </div>
-            }))}
+            <Col xs={12} sm={6} lg={6} xl={4}>
+            <p className='mb-0'>Select Store:</p>
+              <select placeholder='Select store'
+                value={selectedStore}
+                // className='store-select'
+                className="auth_input"
+                onChange={handleChange}>
+                {storeDropdown.map(store => (
+                  <option key={store} value={store}>{store}</option>
+                ))}
+                {/* {storeDropdown.map(store => (
+        <option key={store} value={store}>{store}</option>
+    ))} */}
+              </select>
+            </Col>
 
-      </div>
+          </Row>
+        </Grid>
+      </Grid>
+
+
+
+      <Grid container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        {items
+          .filter(item => !selectedStore || item.store === selectedStore)
+          .filter(item => !itemBook || item.item_name.toLowerCase().includes(itemBook.toLowerCase()))
+          .map((item) => (
+            <Grid item xs={12} md={6} lg={4} >
+              <ItemCard key={item._id} item={item} endDate={endDate} startDate={startDate} 
+              endTime={endTime} startTime={startTime} 
+
+              // quantity={quantity} setQuantity={setQuantity}
+              />
             </Grid>
+          ))}
+      </Grid>
 
     </div>
   )

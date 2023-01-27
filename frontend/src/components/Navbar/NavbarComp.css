@@ -1,4 +1,4 @@
-.navbar {
+/* .navbar {
     background-color: red;
 }
 
@@ -6,7 +6,7 @@
     height :100%;
     
     
-    /* width : 80%, */
+    
     
 }
 
@@ -17,4 +17,8 @@
 .logout_button {
     margin-top: 5%;
     margin-left: 10px;
+} */
+
+.navbarcollapse {
+    background-color: black;
 }

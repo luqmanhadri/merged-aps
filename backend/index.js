@@ -7,8 +7,10 @@ const videoRouter = require('./routes/Video');
 const inventoryRouter = require('./routes/Inventory');
 const eventRouter = require('./routes/Event');
 const wellnessRouter = require('./routes/Wellness');
+const bookingRouter = require('./routes/Booking');
 // const commentRouter = require('./routes/Comment');
 const accountRouter = require('./routes/Account');
+const teamRouter = require('./routes/Team');
 const announcementRouter = require('./routes/Announcement');
 const cookieParser = require("cookie-parser")
 // const session = require("express-session")
@@ -45,10 +47,10 @@ const connect = () => {
 }
 
 app.use(cors(
-//   {
-//     credentials: true,
-//     origin: 'http://localhost:3000'
-// }
+  {
+    // credentials: true,
+    origin: 'http://localhost:3000'
+}
 ));
 app.use("/profile", profileRouter);
 app.use("/videos", videoRouter);
@@ -58,7 +60,8 @@ app.use("/account", accountRouter);
 app.use("/announcement", announcementRouter);
 app.use("/event", eventRouter);
 app.use("/wellness", wellnessRouter);
-
+app.use("/booking", bookingRouter);
+app.use("/team", teamRouter);
 
 
 

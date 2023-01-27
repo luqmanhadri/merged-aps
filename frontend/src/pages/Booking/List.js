@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns'
 import {
   faBed,
@@ -20,9 +22,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { new_search } from '../../redux/bookingSlice';
 import { useLocation } from "react-router-dom";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function List() {
 
+  let navigate = useNavigate();
   const location = useLocation();
   // const [min, setMin] = useState(undefined);
   // const [max, setMax] = useState(undefined);
@@ -32,13 +36,16 @@ function List() {
 
   const [openDate, setOpenDate] = useState(false)
 
-  const [dates, setDate] = useState(location.state.dates);
+  
+  const [startDate, setStartDate] = useState(location.state.startDate);
+  const [endDate, setEndDate] = useState(location.state.endDate);
 
   const [openQuantity, setOpenQuantity] = useState(false);
   const [quantity, setQuantity] = useState(location.state.quantity);
-  const [store, setStore] = useState("");
+  const [selectedStore, setSelectedStore] = useState("");
 
-  const [item, setItem] = useState(location.state.item);
+  const [item, setItemBook] = useState(location.state.item);
+  
   //   const [amount, setAmount] = useState(0);
   //   const [cost, setCost] = useState(0);
 
@@ -51,11 +58,15 @@ function List() {
   };
 
   const { data, loading, error, reFetch } = useFetch(
-    `/inventory/search?item=${item}`
+    `/booking/search?item=${item}`
   );
 
   const handleClick = () => {
     reFetch();
+  };
+
+  const handleChange = (event) => {
+    setSelectedStore(event.target.value);
   };
 
   //   const handleSearch = () => {
@@ -83,7 +94,45 @@ function List() {
   return (
     <div className='Inventory'>
 
-      <div className='SearchItemBar'>
+<form className="search-form">
+        <input 
+        type="text" 
+        placeholder="Enter item name" 
+        className="search-input" 
+        onChange={(e) => setItemBook(e.target.value)}
+        />
+
+        <div className="date-picker">
+        <KeyboardArrowDownIcon onClick={() => setOpenDate(!openDate)} />
+          {openDate && <DatePicker
+            selected={startDate}
+            onChange={date => setStartDate(date)}
+            className="check-in"
+            placeholderText='Start date'
+          />}
+
+          {openDate && <DatePicker selected={endDate}
+            onChange={date => setEndDate(date)}
+            className="check-out"
+            placeholderText='End date' />}
+
+          
+        </div>
+        
+        
+        <select id="store-select" className='dropdown' placeholder='Select store' value={selectedStore} onChange={handleChange}>
+        <option value="" disabled selected>Select store</option>
+            <option value="Pusat Sukan UM">Pusat Sukan UM</option>
+            <option value="Gymnasium UM">Gymnasium UM</option>
+          </select>
+
+
+        <button 
+        onClick={()=>navigate(`/search_item?item_name=${item}&store=${selectedStore}`)} 
+        className="search-button">Search</button>
+      </form>
+
+      {/* <div className='SearchItemBar'>
         <div className="headerSearchItem">
           <FontAwesomeIcon icon={faBed} className="headerIcon" />
           <input
@@ -152,7 +201,7 @@ function List() {
 
         <button className='btn btn-primary' onClick={handleClick}> Search </button>
 
-      </div>
+      </div> */}
 
       <div className='row justify-content-center'>
 

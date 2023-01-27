@@ -7,19 +7,12 @@ import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
 
 function Register() {
 
-  // const [selectedStore, setSelectedStore] = useState('Athlete');
 
-  // const handleChange = (event) => {
-  //   setSelectedStore(event.target.value);
-  // };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [approval, setApproval] = useState(true);
 
-  // const handleRole = () => {
-  //   setRole("Athlete");
-  // };
 
   const dispatch = useDispatch();
   const navigate = useNavigate()

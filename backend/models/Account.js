@@ -47,6 +47,14 @@ const AccountSchema = new mongoose.Schema({
         type: String,
         
     },
+
+    gender : {
+        type: String,
+    },
+
+    state : {
+        type: String,
+    },
         
     sport: {
         type: String,
@@ -58,7 +66,7 @@ const AccountSchema = new mongoose.Schema({
         
     },
         
-    contact: {
+    email: {
         type: String,
         
     },

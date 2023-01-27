@@ -16,10 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  // const token = 'your-jwt-token';
-
-// Set the JWT in a cookie called 'access_token'
-
+ 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,9 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="main">
-      
-    {/* <div className="container" id="container"> */}
+    
     <div >
     <div className="form-container">
       <form className='loginForm' action="#">
@@ -67,7 +62,7 @@ const Login = () => {
     </div>
    
   </div>
-  </div>
+ 
     
   )
 }

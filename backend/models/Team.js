@@ -3,25 +3,64 @@ const mongoose = require("mongoose")
 
 const TeamSchema = new mongoose.Schema({
 
-    coach: {
+    name : {
         type: String,
-      },
+        required : true
+    },
+
+    coach: {
+        type: [{
+            id: {
+                type: String,
+                required: true
+              },
+              name: {
+                type: String,
+                required: true
+              },
+          }],
+        default: [],
+    },
 
     manager: {
-        type: String,
+        type: [{
+            id: {
+                type: String,
+                required: true
+              },
+              name: {
+                type: String,
+                required: true
+              },
+          }],
+        default: [],
     },
 
     players: {
-        type: [String],
+        type: [{
+            userId: String,
+        }],
         default: [],
     },
 
-    achievements: {
-        type: [Text],
+    achievement: {
+        type: [{
+            year: {
+                type: Number,
+                required: true
+              },
+              achievement: {
+                type: String,
+              },
+          }],
         default: [],
     },
 
-    
-}, {timestamps: true});
+    logoUrl : {
+        type : String,
+    }
 
-module.exports =  mongoose.model("Team", TeamSchema)
+
+}, { timestamps: true });
+
+module.exports = mongoose.model("Team", TeamSchema)

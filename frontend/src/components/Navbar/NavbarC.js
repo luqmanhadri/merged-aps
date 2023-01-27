@@ -27,7 +27,7 @@ function NavbarC() {
       dispatch(logout());
       Cookies.remove('access_token');
       console.log("Cookie removed")
-      // navigate("/");
+      navigate("/");
     } catch (err) {
       console.log(err)
     }
@@ -54,23 +54,42 @@ function NavbarC() {
   return (
 
 
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand href="/home">APS</Navbar.Brand>
+    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+      <Navbar.Brand >APS</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" bg="dark">
-        <Nav className="mr-auto" bg="dark">
-         
-          <Nav.Link href="/home">Home</Nav.Link>
+        <Nav className="navbarcollapse">
+        
           
-          <Nav.Link href="team_sheet">Inventory</Nav.Link>
-          <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
           <Nav.Link as={Link} to="/search_profile">Search Profile</Nav.Link>
-          <Nav.Link as={Link} to="/team_dashboard">Team</Nav.Link>
-          <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
+          {datatoken ? (
+          <Nav bg="dark">
+            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link onClick={()=> navigate(`/team/${datatoken.sport}`)}>Team</Nav.Link>
+            <Nav.Link as={Link} to="/booking">Booking</Nav.Link>
+            <Nav.Link as={Link} to="/fitness">Fitness</Nav.Link>
           <Nav.Link as={Link} to="/wellness">Wellness</Nav.Link>
+          
+          <Nav.Link as={Link} to="/inventory">Storekeeper Dashboard</Nav.Link>
           <Nav.Link as={Link} to="/schedule">Schedule</Nav.Link>
+          </Nav>
+        ) : (
+          <div></div>
+        )}
+
+{datatoken && datatoken.role === "admin" ? (
           
           <Nav.Link as={Link} to="/admin">Admin Dashboard</Nav.Link>
+
+        ) : (
+          <div></div>
+        )}
+
+          
+         
+          
+          <Nav.Link as={Link} to="/search_team">Search Team</Nav.Link>
+          
         </Nav>
         {datatoken ? (
           <Nav bg="dark">

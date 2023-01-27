@@ -9,7 +9,10 @@ const {createAccount, updateAccount, signin,
   getAccountStorekeepers,
   createComment,
   deleteComment,
-  getAccountBySport} = require("../controllers/Account");
+  getAccountBySport,
+  approveUser,
+  randomAccountHome,
+  getAccountUnapproved} = require("../controllers/Account");
 // const { verifyToken } = require("../middlewares/verifyToken");
 const router = express.Router();
 const {
@@ -40,6 +43,18 @@ router.get("/random",
  randomAccount
 );
 
+//get random account
+router.get("/find", 
+//  verifyToken 
+ getAccountUnapproved
+);
+
+//get random account
+router.get("/random/home", 
+//  verifyToken 
+ randomAccountHome
+);
+
 //login
 router.post("/login", signin)
 
@@ -62,7 +77,7 @@ router.get("/manager", getAccountManagers);
 router.get("/storekeeper", getAccountStorekeepers);
 
 //get sport
-router.get("/sport/:sport", getAccountBySport);
+router.get("/sport/:id", getAccountBySport);
 
 //post comment
 router.post("/comment/:id", createComment)
@@ -70,7 +85,9 @@ router.post("/comment/:id", createComment)
 //delete comment
 router.delete("/comment/:id/:commentid", deleteComment)
 
-//logout
+//update account
+router.patch("/request/:id", approveUser)
+
 
 
 module.exports = router;

@@ -1,25 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const { Inventory } = require("../models");
-const {createItems, getItems, updateItemAvailability, searchItems} = require("../controllers/Inventory");
-
-// router.get("/", async (req, res) =>{
-//     const listofItems = await Inventory.findAll();
-//     res.json(listofItems);
-// });
-
-
-// router.post("/", async (req, res) => {
-//     const item = req.body
-//     await Inventory.create(item);
-//     res.json(item);
-// });
+const {createItems, getItems, updateItemAvailability, searchItems, updateItem, deleteItem} = require("../controllers/Inventory");
 
 //create items
 router.post("/", createItems)
 
 //get items
 router.get("/",getItems);
+
+router.patch("/:id", updateItem);
+
+router.delete("/:id", deleteItem);
 
 router.put("/availability/:id", updateItemAvailability);
 
